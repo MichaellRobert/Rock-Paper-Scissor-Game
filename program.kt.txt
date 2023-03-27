@@ -1,0 +1,98 @@
+import java.util.Scanner
+
+// Class representing a player in the game
+class Player(val name: String) {
+    var score = 0
+    var choice: Choice? = null
+}
+
+// Enumeration representing the three possible choices in the game
+enum class Choice {
+    ROCK, PAPER, SCISSORS
+}
+
+// Class representing the game
+class Game(val player1: Player, val player2: Player) {
+    private val scanner = Scanner(System.`in`)
+
+    // Function to start the game
+    fun start() {
+        println("Welcome to the game of Rock-Paper-Scissors!")
+        while (true) {
+            println("${player1.name}, please choose: 1. Rock 2. Paper 3. Scissors")
+            player1.choice = parseChoice(scanner.nextInt())
+            println("${player2.name}, please choose: 1. Rock 2. Paper 3. Scissors")
+            player2.choice = parseChoice(scanner.nextInt())
+            val result = getResult(player1.choice!!, player2.choice!!)
+            when (result) {
+                1 -> {
+                    player1.score++
+                    println("${player1.name} wins!")
+                }
+                2 -> {
+                    player2.score++
+                    println("${player2.name} wins!")
+                }
+                else -> {
+                    println("It's a draw!")
+                }
+            }
+            println("Current score: ${player1.name} ${player1.score} - ${player2.score} ${player2.name}")
+            println("Do you want to play again? (y/n)")
+            if (scanner.next() != "y") break
+        }
+    }
+
+    // Function to parse user input into a Choice enumeration value
+    private fun parseChoice(choice: Int): Choice? {
+        return when (choice) {
+            1 -> Choice.ROCK
+            2 -> Choice.PAPER
+            3 -> Choice.SCISSORS
+            else -> null
+        }
+    }
+
+    // Function to determine the result of the game based on the choices of the two players
+    private fun getResult(choice1: Choice, choice2: Choice): Int {
+        return when (choice1) {
+            Choice.ROCK -> when (choice2) {
+                Choice.PAPER -> 2
+                Choice.SCISSORS -> 1
+                else -> 0
+            }
+            Choice.PAPER -> when (choice2) {
+                Choice.ROCK -> 1
+                Choice.SCISSORS -> 2
+                else -> 0
+            }
+            Choice.SCISSORS -> when (choice2) {
+                Choice.ROCK -> 2
+                Choice.PAPER -> 1
+                else -> 0
+            }
+        }
+    }
+}
+
+// Main function
+fun main() {
+    val scanner = Scanner(System.`in`)
+    println("Welcome to the game of Rock-Paper-Scissors!")
+    println("1. Register 2. Login")
+    val choice = scanner.nextInt()
+    if (choice == 1) {
+        println("Please enter your username:")
+        val username = scanner.next()
+        println("Please enter your password:")
+        val password = scanner.next()
+        println("Registration successful!")
+        println("Your username: $username, password: $password")
+    } else if (choice == 2) {
+        println("Please enter your username:")
+        val username = scanner.next()
+        println("Please enter your password:")
+        val password = scanner.next()
+        if (username == "admin" && password == "password") {
+            val player1 = Player(username)
+            val player2 = Player("Computer")
